@@ -57,7 +57,7 @@ export default class Tour extends Component {
     this.service.get("worklist").then(result => {
         console.log('resss', result);
         if(result.worklist) {
-            setData('workList', result.worklist                                                                                                                                                                                                                                                                                                                                                                                                 ).then(res => {
+            setData('workList', result.worklist).then(res => {
                 console.log('result', res);
             });
         }
@@ -66,6 +66,7 @@ export default class Tour extends Component {
 
   _syncData = async () => {
     console.log('sync data');
+    this.loadDataInBackground();
     await this.findTours();
   }
 
