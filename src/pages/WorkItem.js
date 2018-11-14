@@ -3,6 +3,7 @@ import {Platform, StyleSheet, View, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Orientation from 'react-native-orientation';
 import ActionButton from 'react-native-action-button';
+import { CachedImage } from 'react-native-cached-image';
 import moment from 'moment';
 
 export default class WorkItem extends Component {
@@ -71,7 +72,8 @@ export default class WorkItem extends Component {
       <View style={styles.container}>
         {
             workItems.map((item, index) => (
-                <ImageBackground
+                <CachedImage
+                    resizeMode="cover"
                     key={index}
                     style={styles.imageBackground}
                     source={{
@@ -105,7 +107,7 @@ export default class WorkItem extends Component {
                         renderIcon={() => <Icon name="md-text" color="white" size={30} />}
                         onPress={() => { console.log("hi")}}
                     />
-                </ImageBackground>
+                </CachedImage>
             ))
         }
       </View>
