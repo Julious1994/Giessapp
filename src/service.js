@@ -32,7 +32,10 @@ class Service {
 
     get(url) {
         const method = "GET";
-        return this.request(url, method).then(res => res.json());
+        return this.request(url, method).then(res => res.json()).catch(err => {
+            console.log('ERR:', err);
+            return { status: 0, error: "Network request failed"};
+        });
     }
 
     delete() {
