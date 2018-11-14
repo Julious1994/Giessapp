@@ -6,6 +6,7 @@ const TourForm = ({tour, ...props}) => (
     animationType="fade"
     transparent={true}
     visible={props.modalVisible}
+    onRequestClose={() => props.setModalVisible(false)}
   >
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
