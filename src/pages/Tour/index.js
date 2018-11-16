@@ -122,11 +122,18 @@ export default class Tour extends Component {
     const { tour, tours } = this.state;
     const object = {
         ...tour,
-        id: '',
         createdAt: moment().format('DD-MM-YYYY'),
         completedWorkItems: [],
     }
     // add item
+    const ids = tours.map(tour => Number(tour.id)) || [];
+    if(ids.length) {
+        object.id = `${Math.max(...ids) + 1}`;
+    } else {
+        object.id = '1';
+    }
+    this.db.tours.insert(object);
+    
     tours.push({...object});
     this.setState({ tours });
     this.setModalVisible(false);
