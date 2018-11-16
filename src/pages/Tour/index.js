@@ -120,6 +120,9 @@ export default class Tour extends Component {
 
   addNewTour() {
     const { tour, tours } = this.state;
+    if(!this.validateFormData()) {
+        return;
+    }
     const object = {
         ...tour,
         createdAt: moment().format('DD-MM-YYYY'),
@@ -133,10 +136,18 @@ export default class Tour extends Component {
         object.id = '1';
     }
     this.db.tours.insert(object);
-    
+
     tours.push({...object});
     this.setState({ tours });
     this.setModalVisible(false);
+  }
+
+  validateFormData() {
+    const { tour } = this.state;
+    if(!tour.name || tour.name === '') {
+        return false;
+    }
+    return true;
   }
 
   renderTour = ({item, index}) => {
