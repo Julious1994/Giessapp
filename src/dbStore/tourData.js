@@ -40,29 +40,5 @@ export const tours = [
         id: '7',
         createdAt: '25-08-2015',
         completedWorkItems: [],
-    },
-    {
-        name: 'Tour 8',
-        id: '8',
-        createdAt: '25-08-2016',
-        completedWorkItems: [],
-    },
-    {
-        name: 'Tour 9',
-        id: '9',
-        createdAt: '25-08-2015',
-        completedWorkItems: [],
-    },
-    {
-        name: 'Tour 10',
-        id: '10',
-        createdAt: '25-08-2016',
-        completedWorkItems: [],
-    },
-    {
-        name: 'Tour 11',
-        id: '11',
-        createdAt: '25-08-2015',
-        completedWorkItems: [],
     }
 ]
