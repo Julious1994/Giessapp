@@ -6,6 +6,13 @@ import ActionButton from 'react-native-action-button';
 import { CachedImage } from 'react-native-cached-image';
 import moment from 'moment';
 
+const dummyItems = [
+    {id: '888-555-555', photoUrl: 'https://www.keralatourism.org/images/picture/categoryimages/vertical/others20131028124330.jpg'},
+    {id: '898-355-155', photoUrl: 'https://www.keralatourism.org/images/picture/categoryimages/vertical/forts20131028124238.jpg'},
+    {id: '823-565-355', photoUrl: 'https://www.keralatourism.org/images/picture/categoryimages/vertical/picnic_spots20131028124405.jpg'},
+    {id: '189-568-458', photoUrl: 'https://www.keralatourism.org/images/picture/categoryimages/vertical/places_of_interest20131028124431.jpg'},
+]
+
 export default class WorkItem extends Component {
 
   state = {
@@ -21,30 +28,26 @@ export default class WorkItem extends Component {
   };
 
   componentDidMount() {
-    Orientation.lockToLandscape();
     const { navigation } = this.props;
     const item = navigation.getParam('item', {});
-    let counter = 1;
-    const workItems = item.workItems || [];
+
+    Orientation.lockToLandscape();
+
+    let workItems = item.workItems || [];
+    // workItems = [...workItems, ...dummyItems];
+    workItems = workItems.filter(item => !this.isCompleted(item))
+    
     this.setState({ workItems });
-    // if(item.sectionId) {
-    //     workItems.forEach((element, i) => {
-    //         element.id = `${item.sectionId}${counter}`;
-    //         workItems[i] = {...element};
-    //         counter++;
-    //     });
-    //     this.setState({ workItems });
-    // }
   }
 
   componentWillUnmount() {
       Orientation.unlockAllOrientations();
   }
 
-  async setCompletedStatus(workItem, status) {
+  async setCompletedStatus(workItem, status, index) {
     const { navigation } = this.props;
+    const { workItems } = this.state;
     const tour = navigation.getParam('tour', {});
-    const db = navigation.getParam('db', {});
     const completedWorkItems = tour.completedWorkItems || []; 
     const hasItem = completedWorkItems.find(item => item.itemId === workItem.id);
     if(!hasItem) {
@@ -56,6 +59,8 @@ export default class WorkItem extends Component {
         completedWorkItems.push({...object});
         await tour.atomicSet('completedWorkItems', completedWorkItems);
     }
+    workItems.splice(index, 1);
+    this.setState({ workItems });
   }
 
   isCompleted(workItem) {
@@ -63,15 +68,16 @@ export default class WorkItem extends Component {
     const tour = navigation.getParam('tour', {});  
     const completedWorkItems = tour.completedWorkItems || []; 
     const hasItem = completedWorkItems.find(item => item.itemId === workItem.id);
-    return hasItem ? false : true;
+    return hasItem ? true : false;
   }
 
   render() {
     const { workItems } = this.state;
+    const items = workItems.slice(0, 3);
     return (
       <View style={styles.container}>
         {
-            workItems.map((item, index) => (
+            items.map((item, index) => (
                 <CachedImage
                     resizeMode="cover"
                     key={index}
@@ -81,26 +87,20 @@ export default class WorkItem extends Component {
                         cache: 'only-if-cached',
                     }}
                 >
-                    {
-                        this.isCompleted(item) &&
-                        <ActionButton
-                            position="left"
-                            buttonColor="rgba(51,51,255,0.8)"
-                            size={75}
-                            renderIcon={() => <Icon name="md-checkmark" color="white" size={30} />}
-                            onPress={() => this.setCompletedStatus(item, true)}
-                        />
-                    }
-                    {
-                        this.isCompleted(item) &&
-                        <ActionButton
-                            position="center"
-                            buttonColor="rgba(0,255,255,0.8)"
-                            size={75}
-                            renderIcon={() => <Icon name="md-close" color="white" size={30} />}
-                            onPress={() => this.setCompletedStatus(item, false)}
-                        />
-                    }
+                    <ActionButton
+                        position="left"
+                        buttonColor="rgba(51,51,255,0.8)"
+                        size={75}
+                        renderIcon={() => <Icon name="md-checkmark" color="white" size={30} />}
+                        onPress={() => this.setCompletedStatus(item, true, index)}
+                    />
+                    <ActionButton
+                        position="center"
+                        buttonColor="rgba(0,255,255,0.8)"
+                        size={75}
+                        renderIcon={() => <Icon name="md-close" color="white" size={30} />}
+                        onPress={() => this.setCompletedStatus(item, false, index)}
+                    />
                     <ActionButton
                         buttonColor="rgba(127,0,255,0.8)"
                         size={75}
