@@ -36,7 +36,7 @@ export default class Section extends Component {
             <View style={listStyles.leftContainer}>
                 <Text>{item.name || item.sectionId}</Text>
                 <Text>
-                    12 Spots
+                    {(item.workItems || []).length} Spots
                 </Text>
             </View>
             <View style={listStyles.rightContainer}>
